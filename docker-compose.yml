@@ -1,0 +1,60 @@
+version: '3.7'
+services:
+  mongodb:
+    image: mongo:latest
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: MyAdmin
+      MONGO_INITDB_ROOT_PASSWORD: MyPass
+    ports:
+      - 27017:27017
+    volumes:
+      - data:/data/dbMongo
+
+  redis:
+    container_name: redis
+    image: redis
+    ports:
+      - 6379:6379
+    volumes:
+      - redis:/data
+    environment:
+      - REDIS_PASSWORD=admin
+      - REDIS_PORT=6379
+      - REDIS_DATABASES=16
+
+  nest-backend:
+    container_name: star-wars
+    image: nest-api
+    build:
+      dockerfile: Dockerfile
+      context: .
+    ports:
+      - 3001:3001
+    environment:
+      - NODE_ENV=development
+      - APP_PORT=3001
+      - APP_NAME=Star Wars API
+      - APP_VERSION='1.0.0'
+      - BODY_LIMIT='100kb'
+      - CORS_HEADERS="*"
+      - CORS_METHODS="GET HEAD PUT POST DELETE OPTIONS"
+      - MONGO_DB_CONNECTION_STRING_URL=mongodb://MyAdmin:MyPass@mongodb:27017/?authMechanism=DEFAULT
+      - MONGO_DB_NAME=star-wars
+      - MONGO_DB_CONNECTION_TIME_OUT=15000
+      - MONGO_DB_ACQUIRE_TIME_OUT=15000
+      - MONGO_DB_CONNECTION_LIMIT=20
+      - REDIS_DB_HOST=redis
+      - REDIS_DB_PORT=6379
+      - REDIS_DB_TTL=10
+    volumes:
+      - ./src:/app/src
+      - .:/app
+      - /app/node_modules
+    restart: unless-stopped
+
+volumes:
+  data:
+    driver: local
+  redis:
+    driver: local

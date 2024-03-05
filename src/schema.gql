@@ -1,0 +1,223 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type PagingMetaResult {
+  count: Float!
+  startIndex: Float!
+  endIndex: Float
+  hasNextPage: Boolean!
+}
+
+type PlanetOutput {
+  id: String!
+  name: String!
+  population: Float
+  climate: String
+  terrain: String
+  coordinates: CoordinatesOutput
+  createdAt: String
+  updatedAt: String
+}
+
+type CoordinatesOutput {
+  lat: Float!
+  lon: Float!
+}
+
+type PlanetPagingOutput {
+  pagingMeta: PagingMetaResult!
+  data: [PlanetOutput!]!
+}
+
+type IdOutput {
+  id: String!
+}
+
+type CharacterOutput {
+  id: String!
+  name: String
+  species: String
+  sensitivity: Int
+  location: PlanetOutput!
+  createdAt: String
+  updatedAt: String
+}
+
+type CharacterPagingOutput {
+  pagingMeta: PagingMetaResult!
+  data: [CharacterOutput!]!
+}
+
+type StarshipOutput {
+  id: String!
+  name: String
+  model: String
+  capacity: Float
+  currentLocation: CoordinatesOutput
+  enemies: [StarshipOutput!]
+  passengers: [CharacterOutput!]
+  createdAt: String
+  updatedAt: String
+}
+
+type DistanceOutput {
+  distance: Float!
+}
+
+type StarshipPagingOutput {
+  pagingMeta: PagingMetaResult!
+  data: [StarshipOutput!]!
+}
+
+type Query {
+  planets(pagination: PlanetInputPaginationDto!): PlanetPagingOutput!
+  planetById(id: String!): PlanetOutput!
+  starships(pagination: StarshipInputPaginationDto!): StarshipPagingOutput!
+  starshipById(id: String!): StarshipOutput!
+  characters(pagination: CharacterInputPaginationDto!): CharacterPagingOutput!
+  characterById(id: String!): CharacterOutput!
+}
+
+input PlanetInputPaginationDto {
+  paging: PagingInput
+  args: PlanetQueryDto
+}
+
+input PagingInput {
+  limit: Float!
+  skip: Float!
+
+  """
+  String path to apply ordering. Example: name or user.name or user.books.name
+  """
+  orderBy: String
+  orderByDir: PaginationOrderDir
+  search: String
+}
+
+"""Pagination GraphQL"""
+enum PaginationOrderDir {
+  ASC
+  DESC
+}
+
+input PlanetQueryDto {
+  id: String
+  name: String
+}
+
+input StarshipInputPaginationDto {
+  paging: PagingInput
+  args: StarshipQueryDto
+}
+
+input StarshipQueryDto {
+  id: String
+  name: String
+}
+
+input CharacterInputPaginationDto {
+  paging: PagingInput
+  args: CharacterQueryDto
+}
+
+input CharacterQueryDto {
+  id: String
+  name: String
+}
+
+type Mutation {
+  createPlanet(input: PlanetInput!): PlanetOutput!
+  updatePlanet(input: PlanetUpdateInput!): PlanetOutput!
+  removePlanet(id: String!): IdOutput!
+  createStarship(input: StarshipInput!): StarshipOutput!
+  updateStarship(input: StarshipUpdateInput!): StarshipOutput!
+  removeStarship(id: String!): IdOutput!
+  boardingToShip(input: ToStarshipInput!): StarshipOutput!
+  disembarkingToShip(input: ToStarshipInput!): StarshipOutput!
+  calculateDistance(input: DistanceInput!): DistanceOutput!
+  checkForEnemies(input: EnemiesCheckInput!): [StarshipOutput!]!
+  spawnEnemyShips(input: EnemiesCheckInput!): [StarshipOutput!]!
+  createCharacter(input: CharacterInput!): CharacterOutput!
+  updateCharacter(input: CharacterUpdateInput!): CharacterOutput!
+  removeCharacter(id: String!): IdOutput!
+}
+
+input PlanetInput {
+  name: String
+  population: Int
+  climate: String
+  terrain: String
+  coordinates: CoordinatesInput
+}
+
+input CoordinatesInput {
+  lat: Int!
+  lon: Int!
+}
+
+input PlanetUpdateInput {
+  name: String
+  population: Int
+  climate: String
+  terrain: String
+  coordinates: CoordinatesInput
+  id: String!
+}
+
+input StarshipInput {
+  name: String
+  model: String
+  capacity: Int
+  location: CoordinatesInput
+  passengers: [String!]
+  enemies: [String!]
+}
+
+input StarshipUpdateInput {
+  name: String
+  model: String
+  capacity: Int
+  location: CoordinatesInput
+  passengers: [String!]
+  enemies: [String!]
+  id: String!
+}
+
+input ToStarshipInput {
+  shipId: String!
+  id: String!
+  entity: StarshipEntity!
+}
+
+"""Starship Entity GraphQL"""
+enum StarshipEntity {
+  PASSENGERS
+  ENEMIES
+}
+
+input DistanceInput {
+  planetDestination: String!
+  origin: CoordinatesInput!
+}
+
+input EnemiesCheckInput {
+  range: Int!
+  whoami: String!
+}
+
+input CharacterInput {
+  name: String
+  species: String
+  sensitivity: Int
+  location: String
+}
+
+input CharacterUpdateInput {
+  name: String
+  species: String
+  sensitivity: Int
+  location: String
+  id: String!
+}
