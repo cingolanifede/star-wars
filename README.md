@@ -151,6 +151,18 @@ The goal of this project is to provide a clean and up-to-date "starter pack" for
 
 - Standard CRUD operations for Planet, Character, and Starship.
 - Add & remove characters from starships
+- Use Redis for chaching getById. Example query:
+
+```sh
+    query PlanetById($planetByIdId: String!) {
+      planetById(id: $planetByIdId) {
+        id
+        ...
+      }
+    }
+```
+> It uses cache service with a 10 sec configurable TTL 
+
 - A GPS-like algorithm to calculate distance between ships in km (it uses The Haversine formula to calculate distances between two points on the surface of a sphere using the latitude and longitude of the two points)
 
 ```sh
@@ -203,6 +215,7 @@ WE can use the update endpoint to just update the location (planet reference). T
 
 ### 6.2 Pending functionalities
 
+- Caching with pagination
 - Unit testing (WIP)
 
 
