@@ -82,7 +82,7 @@ You can use docker to launch the NestJS application using the command below.
 # In project folder.
 docker-compose up -d
 ```
-> This will dowload images if needed an run 3 containers (api, mongodb and redis).
+> This will dowload images if needed an run 3 containers (api, mongodb and redis) locally. You can now head to `http://localhost:3001/graphql` and see Apollo Sandbox.
 
 ## 2. Project structure
 
@@ -146,6 +146,65 @@ curl http://localhost:3000/app/version
 ## 6. Project goals
 
 The goal of this project is to provide a clean and up-to-date "starter pack" for GraphQL API projects that are built with NestJS.
+
+### 6.1 Working functionalities
+
+- Standard CRUD operations for Planet, Character, and Starship.
+- Add & remove characters from starships
+- A GPS-like algorithm to calculate distance between ships in km (it uses The Haversine formula to calculate distances between two points on the surface of a sphere using the latitude and longitude of the two points)
+
+```sh
+        mutation CalculateDistance($input: DistanceInput!) {
+          calculateDistance(input: $input) {
+            distance
+          }
+        }
+```
+- Recognize a nearby enemy starships within a set range, it uses the algorithm above. 
+> Disclaimer: All existing ships are queried and the calculates the distances between the actual ship and the range. The starship model could be updated and add a region to minimize the quantity of data from the query.
+
+```sh
+    mutation CheckForEnemies($input: EnemiesCheckInput!) {
+      checkForEnemies(input: $input) {
+        id
+        name
+      }
+    }
+    
+    {
+      "input": {
+        "whoami": "65e5dca860ab26e539f9ce64", # spachip id
+        "range": 30    #range in kilometers
+      }
+    }
+
+```
+- To relocate a character from one planet to another.
+WE can use the update endpoint to just update the location (planet reference). This way:
+
+```sh
+    mutation UpdateCharacter($input: CharacterUpdateInput!) {
+      updateCharacter(input: $input) {
+        id
+        name
+        location {
+          id
+          name
+        }
+      }
+    }
+    
+    {
+      "input": {
+        "id": "65e509da021cd97e34880682",         #character id
+        "location": "65e4e9963c3f22bb7e144713"    #planet id
+      }
+    }
+
+### 6.2 Pending functionalities
+
+- Unit testing (WIP)
+
 
 ## 7. Contributing
 
