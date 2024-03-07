@@ -151,6 +151,20 @@ The goal of this project is to provide a clean and up-to-date "starter pack" for
 
 - Standard CRUD operations for Planet, Character, and Starship.
 - Add & remove characters from starships
+- Pagination query input 
+```sh
+    {
+      "pagination": {
+        "args": {}, # allowed args can be name id or name
+        "paging": {
+          "limit": 10,
+          "skip": 0,
+          "orderByDir": "ASC"
+        }
+      }
+    }
+```
+
 - Use Redis for chaching getById. Example query:
 
 ```sh
@@ -216,7 +230,7 @@ WE can use the update endpoint to just update the location (planet reference). T
 ### 6.2 Pending functionalities
 
 - Caching with pagination
-- Unit testing (WIP)
+- Unit testing (WIP - finish remaining modules, Character module test ok!)
 
 
 ## 7. Contributing

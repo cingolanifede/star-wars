@@ -107,7 +107,7 @@ export class StarshipResolver {
   @ResolveField('passengers', () => [CharacterOutput], { nullable: true })
   async passengers(@Parent() starship: Starship) {
     if (starship?.passengers)
-      return this.characterService.findByFilter({
+      return await this.characterService.findByFilter({
         _id: { $in: starship.passengers },
       });
   }
@@ -115,7 +115,7 @@ export class StarshipResolver {
   @ResolveField('enemies', () => [PlanetOutput], { nullable: true })
   async enemies(@Parent() starship: Starship) {
     if (starship?.enemies)
-      return this.starshipService.findByFilter({
+      return await this.starshipService.findByFilter({
         _id: { $in: starship.enemies },
       });
   }

@@ -65,6 +65,6 @@ export class CharacterResolver {
   @ResolveField('location', () => PlanetOutput)
   async planets(@Parent() character: Character) {
     const { location } = character;
-    return this.planetService.findOne({ _id: location });
+    if (location) return await this.planetService.findOne({ _id: location });
   }
 }
