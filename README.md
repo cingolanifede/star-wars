@@ -69,6 +69,12 @@ You are now ready to launch the NestJS application using the command below.
 npm run start:dev
 ```
 
+Run test
+```sh
+# Launch the watch mode log
+npm run test:watch
+```
+
 You can now head to `http://localhost:3000/graphql` and see Apollo Sandbox.
 
 > There is no restricted routes. In case needed, a graphql middleware could be use ti validate a JWT
