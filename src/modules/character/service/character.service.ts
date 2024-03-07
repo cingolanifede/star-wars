@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { GenericEntityService } from '../../../core/abstracts/generic-entity.service';
 import { Character } from '../entities/character.entity';
 import { CharacterRepository } from '../character.repository';
@@ -27,12 +27,23 @@ export class CharacterService extends GenericEntityService<Character> {
     );
   }
 
-  async findById(id: string): Promise<Character> {
-    const cachedData = await this.cacheService.get<Character>(id);
-    if (cachedData) return cachedData;
-
+  async checkIfExist(id: string) {
     const character = await this.repository.findOne({ _id: id });
-    await this.cacheService.set(id, character);
+    if (!character) throw new NotFoundException('Character not found.');
     return character;
+  }
+
+  async findById(id: string): Promise<Character> {
+    try {
+      const cachedData = await this.cacheService.get<Character>(id);
+      if (cachedData) return cachedData;
+
+      const character = await this.checkIfExist(id);
+
+      await this.cacheService.set(id, character);
+      return character;
+    } catch (error) {
+      throw new NotFoundException(error?.message);
+    }
   }
 }

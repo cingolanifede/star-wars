@@ -35,7 +35,10 @@ export abstract class GenericEntityService<T> {
     }
   }
 
-  public async findAllPaginated(pagination?: PaginationDto, filters: any = {}): Promise<PaginatedData<T>> {
+  public async findAllPaginated(
+    pagination?: PaginationDto,
+    filters: any = {},
+  ): Promise<PaginatedData<T>> {
     try {
       this.logger.debug({
         message: 'Operation findAllPaginated',
